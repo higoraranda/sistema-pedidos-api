@@ -6,11 +6,22 @@ require('dotenv').config();
 const app = express();
 const PORT = process.env.PORT || 4000;
 
-// Middleware
+// Middleware CORS mais permissivo
 app.use(cors({
-  origin: ['http://localhost:3000', 'https://*.vercel.app'],
-  credentials: true
+  origin: [
+    'http://localhost:3000',
+    'http://127.0.0.1:5500', // Live Server do VSCode
+    'https://sistema-pedidos-api-front.vercel.app', // SEU FRONTEND NO VERCEL
+    'https://*.vercel.app' // Todos os subdomínios Vercel
+  ],
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'Accept']
 }));
+
+// Handle preflight requests
+app.options('*', cors());
+
 app.use(express.json());
 
 // Conexão com MongoDB
